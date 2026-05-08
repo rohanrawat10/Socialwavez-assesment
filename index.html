@@ -1,0 +1,407 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>SW Technologies — Modern Web Development</title>
+  <link rel="stylesheet" href="style.css" />
+  <style>
+    /* ── Hero ── */
+    .hero {
+      min-height: 100vh; display: flex; align-items: center;
+      background: var(--bg);
+      position: relative; overflow: hidden; padding-top: var(--nav-h);
+    }
+    .hero::before {
+      content: ''; position: absolute; inset: 0;
+      background:
+        radial-gradient(ellipse 70% 60% at 80% 40%, rgba(0,212,255,0.09), transparent),
+        radial-gradient(ellipse 40% 40% at 20% 70%, rgba(0,136,204,0.06), transparent);
+    }
+    /* Animated grid lines */
+    .hero-grid {
+      position: absolute; inset: 0; z-index: 0;
+      background-image:
+        linear-gradient(rgba(0,212,255,0.04) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(0,212,255,0.04) 1px, transparent 1px);
+      background-size: 64px 64px;
+    }
+    .hero-content { position: relative; z-index: 1; max-width: 720px; }
+    .hero-badge {
+      display: inline-flex; align-items: center; gap: 8px;
+      background: rgba(0,212,255,0.1); border: 1px solid rgba(0,212,255,0.25);
+      border-radius: 100px; padding: 6px 16px;
+      font-size: 0.82rem; font-weight: 600; color: var(--accent);
+      letter-spacing: 0.05em; margin-bottom: 28px;
+    }
+    .hero-badge::before {
+      content: ''; width: 8px; height: 8px; border-radius: 50%;
+      background: var(--accent); animation: pulse 2s infinite;
+    }
+    .hero h1 { margin-bottom: 24px; }
+    .hero h1 em { font-style: normal; color: var(--accent); }
+    .hero > .container > .hero-content > p { font-size: 1.15rem; max-width: 560px; margin-bottom: 40px; }
+    .hero-actions { display: flex; gap: 16px; flex-wrap: wrap; }
+    .hero-scroll {
+      position: absolute; bottom: 36px; left: 50%; transform: translateX(-50%);
+      display: flex; flex-direction: column; align-items: center; gap: 8px;
+      color: var(--text-muted); font-size: 0.75rem; letter-spacing: 0.1em;
+      text-transform: uppercase;
+    }
+    .hero-scroll span { animation: float 2s ease-in-out infinite; font-size: 1.2rem; }
+
+    /* ── Services Cards ── */
+    .service-icon {
+      width: 56px; height: 56px; border-radius: 14px;
+      background: rgba(0,212,255,0.1); border: 1px solid rgba(0,212,255,0.2);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.4rem; margin-bottom: 24px;
+      transition: all var(--transition);
+    }
+    .card:hover .service-icon {
+      background: rgba(0,212,255,0.2); transform: scale(1.05);
+    }
+    .card h3 { margin-bottom: 12px; }
+    .card-link {
+      display: inline-flex; align-items: center; gap: 6px;
+      font-family: var(--font-head); font-size: 0.88rem; font-weight: 600;
+      color: var(--accent); margin-top: 20px; transition: gap var(--transition);
+    }
+    .card:hover .card-link { gap: 10px; }
+
+    /* ── Why Us ── */
+    .why-us { background: var(--bg2); }
+    .why-us-grid {
+      display: grid; grid-template-columns: 1fr 1fr; gap: 0; 
+      border: 1px solid var(--border); border-radius: var(--radius-lg); overflow: hidden;
+    }
+    .why-item {
+      padding: 48px 40px; border-right: 1px solid var(--border);
+      border-bottom: 1px solid var(--border); transition: background var(--transition);
+    }
+    .why-item:nth-child(2n) { border-right: none; }
+    .why-item:nth-child(3), .why-item:nth-child(4) { border-bottom: none; }
+    .why-item:hover { background: rgba(0,212,255,0.04); }
+    .why-num {
+      font-family: var(--font-head); font-size: 3rem; font-weight: 800;
+      color: rgba(0,212,255,0.15); line-height: 1; margin-bottom: 16px;
+    }
+    .why-item h3 { margin-bottom: 10px; }
+
+    /* ── Testimonials ── */
+    .testimonials { background: var(--bg); }
+    .testimonial-card { display: flex; flex-direction: column; }
+    .stars { color: #f59e0b; font-size: 1rem; letter-spacing: 2px; margin-bottom: 20px; }
+    .testimonial-card blockquote {
+      font-size: 1.02rem; color: var(--text);
+      line-height: 1.75; font-style: italic; flex: 1;
+      margin-bottom: 28px;
+    }
+    .testimonial-card blockquote::before { content: '\201C'; color: var(--accent); font-size: 2rem; line-height: 0; vertical-align: -0.5em; margin-right: 4px; }
+    .author { display: flex; align-items: center; gap: 14px; }
+    .avatar {
+      width: 48px; height: 48px; border-radius: 50%;
+      background: linear-gradient(135deg, var(--accent2), var(--accent));
+      display: flex; align-items: center; justify-content: center;
+      font-family: var(--font-head); font-weight: 700; font-size: 1rem; color: #070b14;
+      flex-shrink: 0;
+    }
+    .author-info strong {
+      display: block; font-family: var(--font-head); font-weight: 700; font-size: 0.95rem;
+    }
+    .author-info span { font-size: 0.85rem; color: var(--text-muted); }
+
+    /* ── CTA Strip ── */
+    .cta-strip {
+      background: linear-gradient(135deg, #070b14, #0c1a2e);
+      border-top: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+      padding: 80px 0; text-align: center; position: relative; overflow: hidden;
+    }
+    .cta-strip::before {
+      content: ''; position: absolute; inset: 0;
+      background: radial-gradient(ellipse 60% 100% at 50% 50%, rgba(0,212,255,0.07), transparent);
+    }
+    .cta-strip-content { position: relative; z-index: 1; }
+    .cta-strip h2 { margin-bottom: 16px; }
+    .cta-strip p { font-size: 1.05rem; margin-bottom: 36px; }
+    .cta-btns { display: flex; gap: 16px; justify-content: center; flex-wrap: wrap; }
+
+    @media (max-width: 768px) {
+      .why-us-grid { grid-template-columns: 1fr; }
+      .why-item { border-right: none; }
+      .why-item:last-child { border-bottom: none; }
+      .why-item:nth-child(3) { border-bottom: 1px solid var(--border); }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ═══ NAVBAR ═══ -->
+<nav class="navbar" id="navbar">
+  <div class="nav-inner">
+    <a href="index.html" class="nav-logo">SW<span>.</span>Technologies</a>
+    <ul class="nav-links">
+      <li><a href="index.html" class="active">Home</a></li>
+      <li><a href="about.html">About</a></li>
+      <li><a href="services.html">Services</a></li>
+      <li><a href="contact.html">Contact</a></li>
+    </ul>
+    <a href="contact.html" class="btn btn-primary btn-sm nav-cta">Get a Free Quote</a>
+    <button class="hamburger" id="hamburger" aria-label="Menu">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+</nav>
+
+<!-- Mobile Menu -->
+<div class="mobile-menu" id="mobileMenu">
+  <a href="index.html">Home</a>
+  <a href="about.html">About</a>
+  <a href="services.html">Services</a>
+  <a href="contact.html">Contact</a>
+  <a href="contact.html" class="btn btn-primary">Get a Free Quote</a>
+</div>
+
+<!-- ═══ HERO ═══ -->
+<section class="hero">
+  <div class="hero-grid"></div>
+  <div class="container">
+    <div class="hero-content">
+      <div class="hero-badge fade-up">✦ Web Development Experts</div>
+      <h1 class="fade-up-1">
+        We Build Websites<br>That <em>Win</em> Clients<br>For You
+      </h1>
+      <p class="fade-up-2">
+        Fast, modern, and conversion-focused websites tailored to your business.
+        From startups to enterprises — we make your brand unforgettable online.
+      </p>
+      <div class="hero-actions fade-up-3">
+        <a href="contact.html" class="btn btn-primary">Get a Free Quote →</a>
+        <a href="services.html" class="btn btn-outline">View Our Services</a>
+      </div>
+    </div>
+  </div>
+  <div class="hero-scroll">
+    <span>↓</span>
+    scroll
+  </div>
+</section>
+
+<!-- ═══ SERVICES OVERVIEW ═══ -->
+<section id="services">
+  <div class="container">
+    <div class="section-header">
+      <div class="section-label">What We Do</div>
+      <h2 class="section-title">Services That <span>Scale</span> Your Business</h2>
+      <div class="divider center"></div>
+      <p class="section-sub">End-to-end web solutions designed to generate real results — not just looks.</p>
+    </div>
+    <div class="grid-4">
+      <div class="card">
+        <div class="service-icon">🎨</div>
+        <h3>Web Design</h3>
+        <p>Stunning, user-centered designs that reflect your brand and turn visitors into customers.</p>
+        <a href="services.html" class="card-link">Learn more →</a>
+      </div>
+      <div class="card">
+        <div class="service-icon">⚡</div>
+        <h3>Web Development</h3>
+        <p>Clean, performant code built on modern stacks — fast loading, SEO-ready, and scalable.</p>
+        <a href="services.html" class="card-link">Learn more →</a>
+      </div>
+      <div class="card">
+        <div class="service-icon">🛒</div>
+        <h3>E-Commerce</h3>
+        <p>Powerful online stores with seamless checkout, payment integration, and inventory management.</p>
+        <a href="services.html" class="card-link">Learn more →</a>
+      </div>
+      <div class="card">
+        <div class="service-icon">📈</div>
+        <h3>SEO &amp; Marketing</h3>
+        <p>Rank higher, attract organic traffic, and grow your audience with data-driven strategies.</p>
+        <a href="services.html" class="card-link">Learn more →</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ WHY CHOOSE US ═══ -->
+<section class="why-us">
+  <div class="container">
+    <div class="section-header" style="margin-bottom:56px;">
+      <div class="section-label">Why SW Technologies</div>
+      <h2 class="section-title">Built Different. <span>Delivered Better.</span></h2>
+      <div class="divider center"></div>
+    </div>
+    <div class="why-us-grid">
+      <div class="why-item">
+        <div class="why-num">01</div>
+        <h3>Performance-First Development</h3>
+        <p>Every site we build scores 90+ on Google PageSpeed. Fast websites rank better, convert better, and keep users engaged longer.</p>
+      </div>
+      <div class="why-item">
+        <div class="why-num">02</div>
+        <h3>100% Custom, No Templates</h3>
+        <p>We build from scratch. Your website will look and function exactly as your brand demands — no cookie-cutter solutions.</p>
+      </div>
+      <div class="why-item">
+        <div class="why-num">03</div>
+        <h3>On-Time Delivery Guarantee</h3>
+        <p>We respect your timeline. Our agile process ensures milestones are hit and projects delivered when promised.</p>
+      </div>
+      <div class="why-item">
+        <div class="why-num">04</div>
+        <h3>Post-Launch Support</h3>
+        <p>Our relationship doesn't end at launch. We provide ongoing maintenance, updates, and strategic support as your business grows.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ TESTIMONIALS ═══ -->
+<section class="testimonials">
+  <div class="container">
+    <div class="section-header">
+      <div class="section-label">Client Stories</div>
+      <h2 class="section-title">What Our <span>Clients Say</span></h2>
+      <div class="divider center"></div>
+    </div>
+    <div class="grid-3">
+      <div class="card testimonial-card">
+        <div class="stars">★★★★★</div>
+        <blockquote>SW Technologies completely transformed our online presence. Our bounce rate dropped by 40% and sales inquiries tripled within the first month of launch. Absolutely incredible work.</blockquote>
+        <div class="author">
+          <div class="avatar">RS</div>
+          <div class="author-info">
+            <strong>Rahul Sharma</strong>
+            <span>CEO, NexaRetail</span>
+          </div>
+        </div>
+      </div>
+      <div class="card testimonial-card">
+        <div class="stars">★★★★★</div>
+        <blockquote>Professional, communicative, and incredibly talented. They delivered our e-commerce platform two weeks ahead of schedule. Every detail was exactly what we envisioned — and more.</blockquote>
+        <div class="author">
+          <div class="avatar">PM</div>
+          <div class="author-info">
+            <strong>Priya Mehta</strong>
+            <span>Founder, Velora Boutique</span>
+          </div>
+        </div>
+      </div>
+      <div class="card testimonial-card">
+        <div class="stars">★★★★★</div>
+        <blockquote>The SEO campaign they ran for us pushed us to position #1 for our primary keywords in just 3 months. The ROI has been phenomenal. I recommend SW Technologies to every business owner I meet.</blockquote>
+        <div class="author">
+          <div class="avatar">AK</div>
+          <div class="author-info">
+            <strong>Arjun Kapoor</strong>
+            <span>Director, GreenPath Logistics</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ CTA STRIP ═══ -->
+<div class="cta-strip">
+  <div class="container">
+    <div class="cta-strip-content">
+      <h2>Ready to Build Something <span class="text-accent">Great?</span></h2>
+      <p>Let's turn your vision into a high-performing website. Free consultation, no strings attached.</p>
+      <div class="cta-btns">
+        <a href="contact.html" class="btn btn-primary">Get a Free Quote →</a>
+        <a href="about.html" class="btn btn-outline">Meet the Team</a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ FOOTER ═══ -->
+<footer>
+  <div class="container">
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <a href="index.html" class="nav-logo" style="font-size:1.3rem;">SW<span style="color:var(--accent)">.</span>Technologies</a>
+        <p>We help businesses, startups, and entrepreneurs build powerful digital presences through modern, high-performance web development.</p>
+        <div class="social-links" style="margin-top:24px;">
+          <a href="#" class="social-link" aria-label="Twitter">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M23 3a10.9 10.9 0 0 1-3.14 1.53 4.48 4.48 0 0 0-7.86 3v1A10.66 10.66 0 0 1 3 4s-4 9 5 13a11.64 11.64 0 0 1-7 2c9 5 20 0 20-11.5a4.5 4.5 0 0 0-.08-.83A7.72 7.72 0 0 0 23 3z"/></svg>
+          </a>
+          <a href="#" class="social-link" aria-label="LinkedIn">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg>
+          </a>
+          <a href="#" class="social-link" aria-label="Instagram">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg>
+          </a>
+          <a href="#" class="social-link" aria-label="GitHub">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"/></svg>
+          </a>
+        </div>
+      </div>
+      <div class="footer-col">
+        <h4>Quick Links</h4>
+        <ul>
+          <li><a href="index.html">Home</a></li>
+          <li><a href="about.html">About Us</a></li>
+          <li><a href="services.html">Services</a></li>
+          <li><a href="contact.html">Contact</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Services</h4>
+        <ul>
+          <li><a href="services.html">Web Design</a></li>
+          <li><a href="services.html">Web Development</a></li>
+          <li><a href="services.html">E-Commerce</a></li>
+          <li><a href="services.html">SEO &amp; Marketing</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Contact Us</h4>
+        <div class="footer-contact-item">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+          42 Tech Park, Sector 18, Gurugram, Haryana 122001
+        </div>
+        <div class="footer-contact-item">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12 19.79 19.79 0 0 1 1.65 3.38 2 2 0 0 1 3.62 1h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.91 8.56a16 16 0 0 0 6 6l.92-.92a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+          +91 98765 43210
+        </div>
+        <div class="footer-contact-item">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+          hello@swtechnologies.in
+        </div>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>© 2024 SW Technologies. All rights reserved.</p>
+      <p style="color:var(--text-muted)">Built with passion &amp; precision.</p>
+    </div>
+  </div>
+</footer>
+
+<script>
+  // Navbar scroll effect
+  const navbar = document.getElementById('navbar');
+  window.addEventListener('scroll', () => {
+    navbar.classList.toggle('scrolled', window.scrollY > 40);
+  });
+
+  // Hamburger menu
+  const hamburger = document.getElementById('hamburger');
+  const mobileMenu = document.getElementById('mobileMenu');
+  hamburger.addEventListener('click', () => {
+    hamburger.classList.toggle('open');
+    mobileMenu.classList.toggle('open');
+  });
+  mobileMenu.querySelectorAll('a').forEach(a => {
+    a.addEventListener('click', () => {
+      hamburger.classList.remove('open');
+      mobileMenu.classList.remove('open');
+    });
+  });
+</script>
+</body>
+</html>
