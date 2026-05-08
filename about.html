@@ -1,0 +1,381 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>About Us — SW Technologies</title>
+  <link rel="stylesheet" href="style.css" />
+  <style>
+    /* ── Story ── */
+    .story-section { background: var(--bg); }
+    .story-grid {
+      display: grid; grid-template-columns: 1fr 1fr; gap: 80px; align-items: center;
+    }
+    .story-visual {
+      position: relative; aspect-ratio: 4/3;
+      background: var(--bg3); border-radius: var(--radius-lg);
+      border: 1px solid var(--border); overflow: hidden;
+    }
+    .story-visual::before {
+      content: ''; position: absolute; inset: 0;
+      background: linear-gradient(135deg, rgba(0,212,255,0.08), rgba(0,136,204,0.04));
+    }
+    .story-code-bg {
+      position: absolute; inset: 0; padding: 28px;
+      font-family: 'Courier New', monospace; font-size: 0.78rem;
+      color: rgba(0,212,255,0.2); line-height: 1.8;
+      overflow: hidden; user-select: none;
+    }
+    .story-badge {
+      position: absolute; bottom: 28px; left: 28px;
+      background: rgba(7,11,20,0.9); border: 1px solid var(--border);
+      border-radius: var(--radius); padding: 16px 20px;
+      display: flex; align-items: center; gap: 12px;
+    }
+    .story-badge-dot {
+      width: 10px; height: 10px; border-radius: 50%;
+      background: #22c55e; animation: pulse 2s infinite;
+    }
+    .story-badge span { font-size: 0.88rem; font-weight: 600; }
+
+    /* ── Mission / Vision ── */
+    .mv-section { background: var(--bg2); }
+    .mv-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 32px; }
+    .mv-card {
+      border-radius: var(--radius-lg); padding: 48px 40px;
+      border: 1px solid var(--border); position: relative; overflow: hidden;
+    }
+    .mv-card.mission { background: linear-gradient(135deg, rgba(0,212,255,0.06), rgba(0,136,204,0.02)); }
+    .mv-card.vision  { background: linear-gradient(135deg, rgba(0,136,204,0.06), rgba(0,212,255,0.02)); }
+    .mv-icon {
+      font-size: 2.5rem; margin-bottom: 20px; display: block;
+    }
+    .mv-card h3 { font-size: 1.6rem; margin-bottom: 16px; }
+    .mv-label {
+      display: inline-block;
+      font-family: var(--font-head); font-size: 0.75rem; font-weight: 700;
+      letter-spacing: 0.12em; text-transform: uppercase;
+      color: var(--accent); margin-bottom: 12px;
+    }
+
+    /* ── Team ── */
+    .team-section { background: var(--bg); }
+    .team-card { text-align: center; }
+    .team-avatar {
+      width: 100px; height: 100px; border-radius: 50%; margin: 0 auto 20px;
+      background: linear-gradient(135deg, var(--bg3), var(--bg2));
+      border: 2px solid var(--border);
+      display: flex; align-items: center; justify-content: center;
+      font-family: var(--font-head); font-size: 1.8rem; font-weight: 800;
+      color: var(--accent); overflow: hidden; transition: all var(--transition);
+    }
+    .card:hover .team-avatar { border-color: var(--accent); transform: scale(1.05); }
+    .team-card h3 { margin-bottom: 6px; }
+    .team-role {
+      font-size: 0.88rem; color: var(--accent); font-weight: 600;
+      font-family: var(--font-head); letter-spacing: 0.05em; margin-bottom: 12px;
+    }
+    .team-bio { font-size: 0.93rem; }
+    .team-socials {
+      display: flex; gap: 10px; justify-content: center; margin-top: 20px;
+    }
+    .team-social {
+      width: 34px; height: 34px; border-radius: 8px;
+      border: 1px solid var(--border);
+      display: flex; align-items: center; justify-content: center;
+      color: var(--text-muted); font-size: 0.8rem;
+      transition: all var(--transition);
+    }
+    .team-social:hover { border-color: var(--accent); color: var(--accent); }
+
+    /* ── Stats ── */
+    .stats-section {
+      background: linear-gradient(135deg, #070b14, #0a1a2e);
+      border-top: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+    }
+    .stats-grid {
+      display: grid; grid-template-columns: repeat(4, 1fr); gap: 0;
+      border: 1px solid var(--border); border-radius: var(--radius-lg); overflow: hidden;
+    }
+    .stat-item {
+      padding: 48px 32px; text-align: center;
+      border-right: 1px solid var(--border);
+      transition: background var(--transition);
+    }
+    .stat-item:last-child { border-right: none; }
+    .stat-item:hover { background: rgba(0,212,255,0.04); }
+    .stat-num {
+      font-family: var(--font-head); font-size: clamp(2.5rem, 5vw, 3.5rem);
+      font-weight: 800; color: var(--accent); line-height: 1; margin-bottom: 10px;
+      display: block;
+    }
+    .stat-label { font-size: 0.95rem; font-weight: 500; color: var(--text); }
+    .stat-sub { font-size: 0.82rem; color: var(--text-muted); margin-top: 4px; }
+
+    @media (max-width: 1024px) {
+      .stats-grid { grid-template-columns: repeat(2, 1fr); }
+      .stat-item:nth-child(2) { border-right: none; }
+      .stat-item:nth-child(3) { border-right: 1px solid var(--border); border-top: 1px solid var(--border); }
+      .stat-item:nth-child(4) { border-right: none; border-top: 1px solid var(--border); }
+    }
+    @media (max-width: 768px) {
+      .story-grid, .mv-grid { grid-template-columns: 1fr; }
+      .story-visual { aspect-ratio: 16/9; }
+      .stats-grid { grid-template-columns: repeat(2, 1fr); }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ═══ NAVBAR ═══ -->
+<nav class="navbar" id="navbar">
+  <div class="nav-inner">
+    <a href="index.html" class="nav-logo">SW<span>.</span>Technologies</a>
+    <ul class="nav-links">
+      <li><a href="index.html">Home</a></li>
+      <li><a href="about.html" class="active">About</a></li>
+      <li><a href="services.html">Services</a></li>
+      <li><a href="contact.html">Contact</a></li>
+    </ul>
+    <a href="contact.html" class="btn btn-primary btn-sm nav-cta">Get a Free Quote</a>
+    <button class="hamburger" id="hamburger" aria-label="Menu">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+</nav>
+
+<!-- Mobile Menu -->
+<div class="mobile-menu" id="mobileMenu">
+  <a href="index.html">Home</a>
+  <a href="about.html">About</a>
+  <a href="services.html">Services</a>
+  <a href="contact.html">Contact</a>
+  <a href="contact.html" class="btn btn-primary">Get a Free Quote</a>
+</div>
+
+<!-- ═══ PAGE BANNER ═══ -->
+<div class="page-banner">
+  <div class="container">
+    <div class="page-banner-content fade-up">
+      <div class="breadcrumb"><a href="index.html">Home</a> <span>/</span> <span>About Us</span></div>
+      <h1>We Are <span class="text-accent">SW Technologies</span></h1>
+      <p>A passionate team of designers and developers crafting the web's future — one pixel at a time.</p>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ COMPANY STORY ═══ -->
+<section class="story-section">
+  <div class="container">
+    <div class="story-grid">
+      <div class="story-visual">
+        <div class="story-code-bg">
+&lt;!DOCTYPE html&gt;<br>
+&lt;html lang="en"&gt;<br>
+&lt;head&gt;<br>
+&nbsp;&nbsp;&lt;meta charset="UTF-8"&gt;<br>
+&nbsp;&nbsp;&lt;title&gt;SW Technologies&lt;/title&gt;<br>
+&lt;/head&gt;<br>
+&lt;body&gt;<br>
+&nbsp;&nbsp;&lt;section class="hero"&gt;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&lt;h1&gt;Build Something&lt;/h1&gt;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&lt;p&gt;Amazing&lt;/p&gt;<br>
+&nbsp;&nbsp;&lt;/section&gt;<br>
+&lt;/body&gt;<br>
+&lt;/html&gt;
+        </div>
+        <div class="story-badge">
+          <div class="story-badge-dot"></div>
+          <span>Building since 2021</span>
+        </div>
+      </div>
+      <div>
+        <div class="section-label">Our Story</div>
+        <h2 class="section-title">From a Laptop to a <span>Leading Studio</span></h2>
+        <div class="divider"></div>
+        <p style="margin-bottom:20px;">SW Technologies was founded in 2021 by a small group of web developers who were tired of seeing businesses struggle with slow, outdated websites. We believed every company — no matter its size — deserved a world-class online presence.</p>
+        <p style="margin-bottom:20px;">What started as a two-person freelance operation quickly grew into a full-service web development studio, trusted by 30+ clients across India and beyond. We've delivered e-commerce platforms, corporate websites, portfolio sites, and SaaS landing pages that have driven real, measurable business outcomes.</p>
+        <p style="margin-bottom:36px;">Today, we continue to grow — but our mission stays the same: build fast, modern, and purposeful websites that make our clients' competitors nervous.</p>
+        <a href="contact.html" class="btn btn-primary">Start Your Project →</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ MISSION & VISION ═══ -->
+<section class="mv-section">
+  <div class="container">
+    <div class="section-header" style="margin-bottom:56px;">
+      <div class="section-label">Purpose &amp; Direction</div>
+      <h2 class="section-title">Mission &amp; <span>Vision</span></h2>
+      <div class="divider center"></div>
+    </div>
+    <div class="mv-grid">
+      <div class="mv-card mission">
+        <span class="mv-icon">🎯</span>
+        <div class="mv-label">Our Mission</div>
+        <h3>Empowering Businesses Digitally</h3>
+        <p>To empower businesses of all sizes with beautifully designed, technically excellent websites that generate leads, build trust, and drive growth. We combine creative design with engineering precision to deliver digital experiences that genuinely work.</p>
+      </div>
+      <div class="mv-card vision">
+        <span class="mv-icon">🔭</span>
+        <div class="mv-label">Our Vision</div>
+        <h3>The Future of Digital Presence</h3>
+        <p>To become South Asia's most trusted web development partner — known for exceptional craft, unwavering reliability, and measurable results. We envision a world where every business owner can compete online with confidence.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ STATS ═══ -->
+<section class="stats-section">
+  <div class="container">
+    <div class="stats-grid">
+      <div class="stat-item">
+        <span class="stat-num">50+</span>
+        <div class="stat-label">Projects Delivered</div>
+        <div class="stat-sub">Across 8 industries</div>
+      </div>
+      <div class="stat-item">
+        <span class="stat-num">30+</span>
+        <div class="stat-label">Happy Clients</div>
+        <div class="stat-sub">5-star average rating</div>
+      </div>
+      <div class="stat-item">
+        <span class="stat-num">3+</span>
+        <div class="stat-label">Years of Excellence</div>
+        <div class="stat-sub">Since 2021</div>
+      </div>
+      <div class="stat-item">
+        <span class="stat-num">98%</span>
+        <div class="stat-label">Client Retention</div>
+        <div class="stat-sub">They keep coming back</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ TEAM ═══ -->
+<section class="team-section">
+  <div class="container">
+    <div class="section-header">
+      <div class="section-label">The People Behind the Code</div>
+      <h2 class="section-title">Meet Our <span>Team</span></h2>
+      <div class="divider center"></div>
+      <p class="section-sub">Talented, passionate, and relentless about quality — our team is what makes SW Technologies special.</p>
+    </div>
+    <div class="grid-3">
+      <div class="card team-card">
+        <div class="team-avatar">SK</div>
+        <h3>Sameer Khan</h3>
+        <div class="team-role">Founder &amp; Lead Developer</div>
+        <p class="team-bio">Full-stack developer with 6+ years of experience. Sameer leads architecture, strategy, and client relationships with a focus on performant, scalable solutions.</p>
+        <div class="team-socials">
+          <a href="#" class="team-social">in</a>
+          <a href="#" class="team-social">tw</a>
+          <a href="#" class="team-social">gh</a>
+        </div>
+      </div>
+      <div class="card team-card">
+        <div class="team-avatar">NV</div>
+        <h3>Nisha Verma</h3>
+        <div class="team-role">Creative Director &amp; UI/UX</div>
+        <p class="team-bio">Award-winning designer with a background in brand identity and digital products. Nisha transforms briefs into visuals that make jaws drop.</p>
+        <div class="team-socials">
+          <a href="#" class="team-social">in</a>
+          <a href="#" class="team-social">dr</a>
+          <a href="#" class="team-social">be</a>
+        </div>
+      </div>
+      <div class="card team-card">
+        <div class="team-avatar">RA</div>
+        <h3>Rohan Agarwal</h3>
+        <div class="team-role">SEO &amp; Digital Marketing</div>
+        <p class="team-bio">Data-driven marketing strategist who has pushed 20+ websites to page-one rankings. Rohan turns organic traffic into a reliable business asset.</p>
+        <div class="team-socials">
+          <a href="#" class="team-social">in</a>
+          <a href="#" class="team-social">tw</a>
+          <a href="#" class="team-social">gh</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ FOOTER ═══ -->
+<footer>
+  <div class="container">
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <a href="index.html" class="nav-logo" style="font-size:1.3rem;">SW<span style="color:var(--accent)">.</span>Technologies</a>
+        <p>We help businesses, startups, and entrepreneurs build powerful digital presences through modern, high-performance web development.</p>
+        <div class="social-links" style="margin-top:24px;">
+          <a href="#" class="social-link" aria-label="Twitter"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M23 3a10.9 10.9 0 0 1-3.14 1.53 4.48 4.48 0 0 0-7.86 3v1A10.66 10.66 0 0 1 3 4s-4 9 5 13a11.64 11.64 0 0 1-7 2c9 5 20 0 20-11.5a4.5 4.5 0 0 0-.08-.83A7.72 7.72 0 0 0 23 3z"/></svg></a>
+          <a href="#" class="social-link" aria-label="LinkedIn"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg></a>
+          <a href="#" class="social-link" aria-label="Instagram"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg></a>
+        </div>
+      </div>
+      <div class="footer-col">
+        <h4>Quick Links</h4>
+        <ul>
+          <li><a href="index.html">Home</a></li>
+          <li><a href="about.html">About Us</a></li>
+          <li><a href="services.html">Services</a></li>
+          <li><a href="contact.html">Contact</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Services</h4>
+        <ul>
+          <li><a href="services.html">Web Design</a></li>
+          <li><a href="services.html">Web Development</a></li>
+          <li><a href="services.html">E-Commerce</a></li>
+          <li><a href="services.html">SEO &amp; Marketing</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Contact Us</h4>
+        <div class="footer-contact-item"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>42 Tech Park, Sector 18, Gurugram</div>
+        <div class="footer-contact-item"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12 19.79 19.79 0 0 1 1.65 3.38 2 2 0 0 1 3.62 1h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.91 8.56a16 16 0 0 0 6 6l.92-.92a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg>+91 98765 43210</div>
+        <div class="footer-contact-item"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>hello@swtechnologies.in</div>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>© 2024 SW Technologies. All rights reserved.</p>
+      <p style="color:var(--text-muted)">Built with passion &amp; precision.</p>
+    </div>
+  </div>
+</footer>
+
+<script>
+  const navbar = document.getElementById('navbar');
+  window.addEventListener('scroll', () => navbar.classList.toggle('scrolled', window.scrollY > 40));
+  const hamburger = document.getElementById('hamburger');
+  const mobileMenu = document.getElementById('mobileMenu');
+  hamburger.addEventListener('click', () => { hamburger.classList.toggle('open'); mobileMenu.classList.toggle('open'); });
+  mobileMenu.querySelectorAll('a').forEach(a => a.addEventListener('click', () => { hamburger.classList.remove('open'); mobileMenu.classList.remove('open'); }));
+
+  // Counter animation
+  const counters = document.querySelectorAll('.stat-num');
+  const observer = new IntersectionObserver(entries => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        const el = entry.target;
+        const target = parseInt(el.textContent);
+        const suffix = el.textContent.replace(/[0-9]/g,'');
+        let current = 0;
+        const step = target / 60;
+        const timer = setInterval(() => {
+          current += step;
+          if (current >= target) { el.textContent = target + suffix; clearInterval(timer); }
+          else el.textContent = Math.floor(current) + suffix;
+        }, 20);
+        observer.unobserve(el);
+      }
+    });
+  }, { threshold: 0.5 });
+  counters.forEach(c => observer.observe(c));
+</script>
+</body>
+</html>
